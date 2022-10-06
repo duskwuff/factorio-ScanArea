@@ -9,15 +9,19 @@ local function on_player_selected_area(event)
     if game.active_mods["space-exploration"] ~= nil then
         -- SE mode
         local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = player.surface.index})
-        local r = zone.radius
-        if remote.call("space-exploration", "get_satellites_launched", {force = player.force}) < 1 and not player.cheat_mode then
-            player.print({"ScanArea.requires-satellite"})
-            return
-        end
-        if zone.type ~= "planet" and zone.type ~= "moon" and not player.cheat_mode then
+        if zone == nil then -- possibly a weird surface like the universe map
             player.print({"ScanArea.bad-surface"})
             return
         end
+        if remote.call("space-exploration", "get_satellites_launched", {force = player.force}) < 1 then
+            player.print({"ScanArea.requires-satellite"})
+            return
+        end
+        if zone.type ~= "planet" and zone.type ~= "moon" then
+            player.print({"ScanArea.bad-surface"})
+            return
+        end
+        local r = zone.radius
         if r ~= nil then
             -- is bounding box entirely outside the planet?
             if x1 > r or y1 > r or x2 < -r or y2 < -r then
