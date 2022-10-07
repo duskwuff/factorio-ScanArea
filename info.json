@@ -1,6 +1,6 @@
 {
     "name": "ScanArea",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "title": "Scan Area",
     "author": "Dusk Wuff",
     "factorio_version": "1.1",
@@ -8,5 +8,5 @@
         "base",
         "(?) space-exploration >= 0.6.0"
     ],
-    "description": "Adds a tool to scan an area with the navigation satellite."
+    "description": "Use your satellites to scan an area of the map."
 }

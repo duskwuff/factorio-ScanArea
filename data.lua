@@ -3,7 +3,6 @@ data:extend{
         type            = "selection-tool",
         name            = "ScanArea-tool",
         subgroup        = "tool",
-        order           = "z[ScanArea-tool]",
         icon            = "__base__/graphics/icons/satellite.png",
         icon_size       = 64,
         icon_mipmaps    = 4,
@@ -22,12 +21,18 @@ data:extend{
         name            = "ScanArea-shortcut",
         action          = "spawn-item",
         item_to_spawn   = "ScanArea-tool",
-        order           = "m[ScanArea-shortcut]",
         technology_to_unlock = "rocket-silo",
         icon        = {
             filename     = "__ScanArea__/graphics/telescope32.png",
             size         = 32,
             mipmap_count = 0,
         },
+    },
+    {
+        type            = "custom-input",
+        name            = "ScanArea-input",
+        key_sequence    = "",
+        action          = "spawn-item",
+        item_to_spawn   = "ScanArea-tool",
     },
 }

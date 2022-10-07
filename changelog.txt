@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022-10-06
+  Changes:
+    - Avoid scanning outside the map in non-SE games.
+    - Allow a keyboard shortcut to be set for Scan Area.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022-10-05
+  Bugfixes:
+    - Fixed a crash when using Scan Area on some Space Exploration surfaces.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2022-10-05
+  Info:
+    - Initial release

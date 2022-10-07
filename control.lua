@@ -5,9 +5,14 @@ local function on_player_selected_area(event)
 
     local player = game.get_player(event.player_index)
     local x1, y1, x2, y2 = event.area.left_top.x, event.area.left_top.y, event.area.right_bottom.x, event.area.right_bottom.y
+    local sw, sh = player.surface.map_gen_settings.width / 2, player.surface.map_gen_settings.height / 2
+
+    if player.render_mode == defines.render_mode.game then
+        player.print({"ScanArea.use-map-view"})
+        return
+    end
 
     if game.active_mods["space-exploration"] ~= nil then
-        -- SE mode
         local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = player.surface.index})
         if zone == nil then -- possibly a weird surface like the universe map
             player.print({"ScanArea.bad-surface"})
@@ -17,25 +22,11 @@ local function on_player_selected_area(event)
             player.print({"ScanArea.requires-satellite"})
             return
         end
-        if zone.type ~= "planet" and zone.type ~= "moon" then
-            player.print({"ScanArea.bad-surface"})
-            return
-        end
-        local r = zone.radius
-        if r ~= nil then
-            -- is bounding box entirely outside the planet?
-            if x1 > r or y1 > r or x2 < -r or y2 < -r then
-                player.print({"ScanArea.out-of-bounds"})
-                return
-            end
-            -- clamp bounding box to planet radius
-            if x1 < -r then x1 = -r end
-            if x2 > r  then x2 = r end
-            if y1 < -r then y1 = -r end
-            if y2 > r  then y2 = r end
-        end
+        -- some SE surfaces, particularly Nauvis, are smaller than the map gen
+        -- settings say they should be
+        sw, sh = zone.radius, zone.radius
     else
-        -- non-SE mode
+        -- non-SE
         local sats = player.force.items_launched["satellite"]
         if sats == nil or sats < 1 then
             player.print({"ScanArea.requires-satellite"})
@@ -43,10 +34,17 @@ local function on_player_selected_area(event)
         end
     end
 
-    if player.render_mode == defines.render_mode.game then
-        player.print({"ScanArea.use-map-view"})
+    -- bounding box entirely outside the surface
+    if x1 > sw or y1 > sw or x2 < -sh or y2 < -sh then
+        player.print({"ScanArea.out-of-bounds"})
         return
     end
+
+    -- clamp bounding box to surface edges
+    if x1 < -sw then x1 = -sw end
+    if x2 >  sw then x2 =  sw end
+    if y1 < -sh then y1 = -sh end
+    if y2 >  sh then y2 =  sh end
 
     -- roughly 100x100 chunks
     if settings.global["ScanArea-limit-size"].value and (x2-x1)*(y2-y1) > 1e7 then
