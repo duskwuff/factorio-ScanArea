@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2022 dusk@woofle.net
+Copyright (c) 2022-2025 dusk@woofle.net
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -4,31 +4,37 @@ local function on_player_selected_area(event)
     end
 
     local player = game.get_player(event.player_index)
+    local surface = player.surface
     local x1, y1, x2, y2 = event.area.left_top.x, event.area.left_top.y, event.area.right_bottom.x, event.area.right_bottom.y
-    local sw, sh = player.surface.map_gen_settings.width / 2, player.surface.map_gen_settings.height / 2
+    local sw, sh = surface.map_gen_settings.width / 2, surface.map_gen_settings.height / 2
+
+    if surface.platform then
+        player.print({"ScanArea.bad-surface"})
+        return
+    end
 
     if player.render_mode == defines.render_mode.game then
         player.print({"ScanArea.use-map-view"})
         return
     end
 
-    if game.active_mods["space-exploration"] ~= nil then
-        local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = player.surface.index})
-        if zone == nil then -- possibly a weird surface like the universe map
-            player.print({"ScanArea.bad-surface"})
-            return
-        end
+    if player.cheat_mode then
+        -- fine, do what you want
+    elseif script.active_mods["space-exploration"] ~= nil then
         if remote.call("space-exploration", "get_satellites_launched", {force = player.force}) < 1 then
             player.print({"ScanArea.requires-satellite"})
             return
         end
         -- some SE surfaces, particularly Nauvis, are smaller than the map gen
         -- settings say they should be
-        sw, sh = zone.radius, zone.radius
+        local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface.index})
+        if zone and zone.radius ~= nil then
+            sw, sh = zone.radius, zone.radius
+        end
     else
         -- non-SE
         local sats = player.force.items_launched["satellite"]
-        if sats == nil or sats < 1 then
+        if (sats or 0) < 1 then
             player.print({"ScanArea.requires-satellite"})
             return
         end
@@ -52,7 +58,7 @@ local function on_player_selected_area(event)
         return
     end
 
-    player.force.chart(player.surface, {{x1, y1}, {x2, y2}})
+    player.force.chart(surface, {{x1, y1}, {x2, y2}})
 end
 script.on_event(defines.events.on_player_selected_area, on_player_selected_area)
 

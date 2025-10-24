@@ -1,12 +1,13 @@
 {
     "name": "ScanArea",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "title": "Scan Area",
-    "author": "Dusk Wuff",
-    "factorio_version": "1.1",
+    "author": "duskwuff",
+    "factorio_version": "2.0",
     "dependencies": [
         "base",
-        "(?) space-exploration >= 0.6.0"
+        "(?) space-age",
+        "(?) space-exploration"
     ],
-    "description": "Use your satellites to scan an area of the map."
+    "description": "Use the satellites you launch to scan areas of the map."
 }
