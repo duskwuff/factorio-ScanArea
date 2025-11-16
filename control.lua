@@ -20,7 +20,7 @@ local function on_player_selected_area(event)
 
     if player.cheat_mode then
         -- fine, do what you want
-    elseif script.active_mods["space-exploration"] ~= nil then
+    elseif script.active_mods["space-exploration"] then
         if remote.call("space-exploration", "get_satellites_launched", {force = player.force}) < 1 then
             player.print({"ScanArea.requires-satellite"})
             return
@@ -31,11 +31,16 @@ local function on_player_selected_area(event)
         if zone and zone.radius ~= nil then
             sw, sh = zone.radius, zone.radius
         end
-    else
-        -- non-SE
+    elseif prototypes.item["satellite"] then
         local sats = player.force.items_launched["satellite"]
         if (sats or 0) < 1 then
             player.print({"ScanArea.requires-satellite"})
+            return
+        end
+    else
+        -- player has mods active which remove the satellite (like Space Age)
+        if player.force.rockets_launched < 1 then
+            player.print({"ScanArea.requires-launch"})
             return
         end
     end

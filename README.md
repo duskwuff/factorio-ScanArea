@@ -2,7 +2,7 @@ Scan Area
 =========
 
 Adds a tool to the toolbar to chart or unchart an area of the map, unlocked by
-launching at least one satellite into space.
+launching at least one satellite into space (or any rocket in Space Age).
 
 (Uncharting an area only makes chunks invisible to the player. It does not
 delete them from the map.)
